@@ -1,15 +1,24 @@
 # Création d'une api
 # Endpoint : POST notes/ -- POST notes/audio -- GET notes/ 
 # GET notes/{id} -- PATCH notes/{id} -- DEL notes/{id} -- GET /notes/search?q=...
-
+#uvicorn main:app --reload --port 8000
+import os
 from fastapi import FastAPI
+from pydantic import BaseModel
+from openai import OpenAI
+from dotenv import load_dotenv
 
+load_dotenv()
 app = FastAPI()
-
+client = OpenAI(api_key = os.getenv("OPENAI_API"))
 
 @app.get("/")
 async def read_root():
-    return {"Hello": "World"}
+    response = client.responses.create(
+    model="gpt-5.4-nano",
+    input="Write a one-sentence bedtime story about a unicorn.")
+    print(response.output_text)
+    return response.output_text
 
 
 @app.get("/items/{item_id}")
