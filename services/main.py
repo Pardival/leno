@@ -7,10 +7,12 @@ from fastapi import FastAPI
 from pydantic import BaseModel
 from openai import OpenAI
 from dotenv import load_dotenv
+from core.database import engine, Base
 
-load_dotenv()
-app = FastAPI()
-open_ai = OpenAI(api_key = os.getenv("OPENAI_API"))
+Base.metadata.create_all(bind=engine)                           # create databse
+load_dotenv()                                                   # load .env in the order to get properties
+open_ai = OpenAI(os.getenv("OPENAI_API"))                       # connect to OpenAI API
+app = FastAPI()                                                 # create FastAPI object for rest service    
 
 @app.get("/")
 async def read_root():

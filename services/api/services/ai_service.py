@@ -2,14 +2,14 @@ import os
 from openai import OpenAI
 from dotenv import load_dotenv
 
-load_dotenv()
-open_ai = OpenAI(os.getenv("OPENAI_API"))
+load_dotenv()                                                   # load .env in the order to get properties
+open_ai = OpenAI(os.getenv("OPENAI_API"))                       # connect to OpenAI api
 
 def audio_to_text(audio_path: str) -> str: 
     with open(audio_path, "rb") as audio_file:
         transcript = open_ai.audio.transcriptions.create(
             model="whisper-1",
-            file7=audio_file
+            file=audio_file
         )
     return transcript.text
 
