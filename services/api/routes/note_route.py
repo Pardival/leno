@@ -1,30 +1,28 @@
 # api/routes/notes.py
-from fastapi import APIRouter, Depends
-from sqlalchemy.orm import Session
+from fastapi import APIRouter, Depends, HTTPException
 from dependencies import get_note_repository
-from repositories.note_repository import NoteRepository
-from models.note import NoteDB
+from repository.note_repository import NoteRepository
+from models.note import NoteDB, NoteCreate, NoteOut
 
 router = APIRouter(prefix="/notes", tags=["notes"])
 
-@router.get("/")
+@router.get("/", response_model=list[NoteCreate])
 def list_notes(repo: NoteRepository = Depends(get_note_repository)):
     return repo.find_all()
 
-@router.get("/{note_id}")
+@router.get("/{note_id}", response_model=NoteCreate)
 def get_note(note_id: str, repo: NoteRepository = Depends(get_note_repository)):
     note = repo.find_by_id(note_id)
     if not note:
         raise HTTPException(status_code=404, detail="Note not found")
     return note
 
-@router.post("/")
-def create_note(toCreate : NoteDB, db: Session = Depends(get_note_repository)):
-    repo = NoteRepository(db)
+@router.post("/", response_model=NoteOut)
+def create_note(to_create: NoteCreate, repo: NoteRepository = Depends(get_note_repository)):
     # 1. Appeler le service OpenAI
     # 2. save dans un markdown
     # 3. save dans la bd
-    return repo.save(toCreate)
+    return repo.save(NoteDB(**to_create.model_dump()))
 
 @router.post("/audio")
 def create_note_by_audio():
