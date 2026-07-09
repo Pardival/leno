@@ -3,7 +3,7 @@ from datetime import datetime
 from models.note import NoteDB
 from repository.note_repository import NoteRepository
 from services.ai_service import classify_note
-from exceptions import NoteNotFoundError
+from exceptions.exceptions import NoteNotFoundError
 
 class NoteService:
     def __init__(self, repo: NoteRepository):

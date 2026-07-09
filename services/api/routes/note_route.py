@@ -1,4 +1,3 @@
-# api/routes/notes.py
 from fastapi import APIRouter, Depends, HTTPException
 from dependencies import get_note_repository, get_note_service
 from repository.note_repository import NoteRepository

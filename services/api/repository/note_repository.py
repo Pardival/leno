@@ -37,3 +37,6 @@ class NoteRepository:
     def find_distinct_categories(self) -> list[str]:
         results = self.db.query(NoteDB.category).distinct().all()
         return [r[0] for r in results if r[0] is not None]
+    
+    def find_by_category(self, category: str) -> list[NoteDB]:
+        return self.db.query(NoteDB).filter(NoteDB.category == category).all()
