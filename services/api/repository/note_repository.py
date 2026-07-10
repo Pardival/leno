@@ -15,7 +15,7 @@ class NoteRepository:
         return self.db.query(NoteDB).filter(NoteDB.id == note_id).first()
 
     def find_all(self) -> list[NoteDB]:
-        return self.repo.find_all()
+        return self.db.query(NoteDB).all()
     
     def delete(self, note_id: str) -> bool:
         note = self.db.query(NoteDB).filter(NoteDB.id == note_id).first()
@@ -30,10 +30,13 @@ class NoteRepository:
         if note is None:
             return None
         for key, value in updates.items():
-            self.db.delete(note)
+            self.db.update(note)
             self.db.commit()
         return note
     
     def find_distinct_categories(self) -> list[str]:
         results = self.db.query(NoteDB.category).distinct().all()
         return [r[0] for r in results if r[0] is not None]
+    
+    def find_by_category(self, category: str) -> list[NoteDB]:
+        return self.db.query(NoteDB).filter(NoteDB.category == category).all()

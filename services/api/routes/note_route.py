@@ -1,4 +1,3 @@
-# api/routes/notes.py
 from fastapi import APIRouter, Depends, HTTPException
 from dependencies import get_note_repository, get_note_service
 from repository.note_repository import NoteRepository
@@ -8,20 +7,18 @@ from models.note import NoteDB, NoteCreate, NoteOut
 
 router = APIRouter(prefix="/notes", tags=["notes"])
 
-@router.get("/", response_model=list[NoteCreate])
+@router.get("/", response_model=list[NoteOut])
 def list_notes(service: NoteService = Depends(get_note_service)):
     return service.find_all()
 
-@router.get("/{note_id}", response_model=NoteCreate)
+@router.get("/{note_id}", response_model=NoteOut)
 def get_note(note_id: str, service: NoteService = Depends(get_note_service)):
     note = service.find_by_id(note_id)
     return note
 
 @router.post("/", response_model=NoteOut)
-def create_note(to_create: NoteCreate, repo: NoteRepository = Depends(get_note_repository)):
-    # 1. Appeler le service OpenAI
-    # 3. save dans la bd
-    return repo.save(NoteDB(**to_create.model_dump()))
+def create_note(content: str, service: NoteService = Depends(get_note_service)):
+    return service.create(content)
 
 @router.post("/audio")
 def create_note_by_audio():
