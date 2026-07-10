@@ -2,7 +2,7 @@ import os
 import json
 from openai import OpenAI
 from dotenv import load_dotenv
-from prompt.prompt_loader import build_classification_prompt
+from prompts.prompt_loader import build_classification_prompt
 
 
 load_dotenv()                                                   # load .env in the order to get properties
