@@ -3,7 +3,8 @@ from dependencies import get_note_repository, get_note_service
 from repository.note_repository import NoteRepository
 from services.note_service import NoteService
 
-from models.note import NoteDB, NoteCreate, NoteOut
+from models.note import NoteDB, NoteCreate, NoteOut, NoteUpdate
+from fastapi import status
 
 router = APIRouter(prefix="/notes", tags=["notes"])
 
@@ -24,14 +25,14 @@ def create_note(content: str, service: NoteService = Depends(get_note_service)):
 def create_note_by_audio():
     return {"post audio"}
 
-@router.patch("/{item_id}")
-def patch_note(note_id: str, service: NoteService = Depends(get_note_service)):
-    return {"patch notes item_id"}
+@router.patch("/{note_id}", response_model=NoteOut)
+def patch_note(note_id: str, note_update: NoteUpdate, service: NoteService = Depends(get_note_service)):
+    return service.update(note_id, note_update)
 
-@router.delete("/{item_id}")
+@router.delete("/{note_id}", status_code= status.HTTP_204_NO_CONTENT)
 def delete_note(note_id: str, service: NoteService = Depends(get_note_service)):
-    return service.delete_note(note_id)
+    return service.delete(note_id)
 
-@router.get("/items/{item_id}")
-def read_item(item_id: int, q: str | None = None):
-    return {"item_id": item_id, "q": q}
+#@router.get("/items/{item_id}")
+#def read_item(item_id: int, q: str | None = None):
+#    return {"item_id": item_id, "q": q}
