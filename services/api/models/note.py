@@ -26,6 +26,14 @@ class NoteCreate(BaseModel):
     audio_path: str | None = None
 
 
+class NoteUpdate(BaseModel):
+    title: str | None = None
+    content: str | None = None
+    category: str | None = None
+    tags: str | None = None
+    audio_path: str | None = None
+
+
 class NoteOut(NoteCreate):
     model_config = ConfigDict(from_attributes=True)
 

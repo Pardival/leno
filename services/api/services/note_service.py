@@ -32,7 +32,7 @@ class NoteService:
         return self.repo.save(note)
 
     def delete(self, note_id: str) -> None:
-        deleted = self.repo.delete_by_id(note_id)
+        deleted = self.repo.delete(note_id)
         if not deleted:
             raise NoteNotFoundError(note_id)
 

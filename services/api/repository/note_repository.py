@@ -25,13 +25,14 @@ class NoteRepository:
         self.db.commit()
         return True
     
-    def update_by_id(self, note_id: str, updates: dict) -> NoteDB | None:
+    def update(self, note_id: str, updates: dict) -> NoteDB | None:
         note = self.db.query(NoteDB).filter(NoteDB.id == note_id).first()
         if note is None:
             return None
         for key, value in updates.items():
-            self.db.update(note)
-            self.db.commit()
+            setattr(note, key, value)
+        self.db.commit()
+        self.db.refresh(note)
         return note
     
     def find_distinct_categories(self) -> list[str]:
