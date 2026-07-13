@@ -4,7 +4,7 @@ import { useCallback, useRef, useState } from "react"
 import { Mic, Type } from "lucide-react"
 import { Component as MorphingCardStack, type CardData } from "@/components/ui/morphing-card-stack"
 import { NoteComposer } from "@/components/leno/note-composer"
-import { RecordZone } from "@/components/leno/record-zone"
+import { VoiceNoteRecorder } from "@/components/leno/voice-note-recorder"
 
 function formatClockDuration(ms: number) {
   const totalSeconds = Math.max(1, Math.round(ms / 1000))
@@ -74,9 +74,12 @@ export function NotesBoard() {
 
   return (
     <div className="flex w-full max-w-3xl flex-col gap-6">
-      <div className="flex flex-col gap-3 md:flex-row">
+      <div className="flex flex-col gap-3">
         <NoteComposer onAddTextNote={addTextNote} />
-        <RecordZone onRecorded={addVoiceNote} />
+        <VoiceNoteRecorder
+          onRecorded={addVoiceNote}
+          className="rounded-2xl border border-dashed border-border bg-secondary/30"
+        />
       </div>
 
       {notes.length > 0 ? (
