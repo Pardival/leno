@@ -9,7 +9,14 @@ export function Logo({ className }: { className?: string }) {
         className,
       )}
     >
-      <Image src="/logo.png" alt="Leno logo" width={112} height={101} className="h-7 w-auto" priority />
+      <Image
+        src="/logo.png"
+        alt="Leno logo"
+        width={112}
+        height={101}
+        className="h-[70%] w-auto"
+        priority
+      />
     </span>
   )
 }
